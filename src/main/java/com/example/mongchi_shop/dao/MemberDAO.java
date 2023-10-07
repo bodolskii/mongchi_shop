@@ -13,8 +13,8 @@ import java.sql.SQLException;
 
 public class MemberDAO {
     public void insertMember(MemberVO memberVO) throws SQLException {
-        String sql = "insert into member (emailId, password, memberName, phone, birthday, addDate)" +
-                " values (?, ?, ?, ?, ?, now())";
+        String sql = "insert into member (emailId, password, memberName, phone, birthday, addDate, zipCode, address01, address02)" +
+                " values (?, ?, ?, ?, ?, now(), ?, ?, ?)";
 
         @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -23,6 +23,9 @@ public class MemberDAO {
         preparedStatement.setString(3, memberVO.getMemberName());
         preparedStatement.setString(4, memberVO.getPhone());
         preparedStatement.setString(5, memberVO.getBirthday());
+        preparedStatement.setString(6, memberVO.getZipCode());
+        preparedStatement.setString(7, memberVO.getAddress01());
+        preparedStatement.setString(8, memberVO.getAddress02());
         preparedStatement.executeUpdate();
     }
     public MemberVO getWithPassword(String emailId, String password) throws SQLException {

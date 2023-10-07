@@ -20,6 +20,10 @@ public class ModifyPasswordController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        MemberDTO dto = (MemberDTO) session.getAttribute("loginInfo");
+        String emailId = dto.getEmailId();
+        req.setAttribute("emailId",emailId);
 
         req.getRequestDispatcher("/WEB-INF/member/modifyPassword.jsp").forward(req,resp);
     }
