@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @Log4j2
 @WebServlet("/products/product")
 public class ProductViewController extends HttpServlet {
-    private final ProductService PRODUCTSERVICE = ProductService.INSTANCE;
+    private final ProductService PRODUCT_SERVICE = ProductService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
@@ -24,7 +24,7 @@ public class ProductViewController extends HttpServlet {
         log.info("pno: " + pno);
 
         try {
-            ProductDTO productDTO = PRODUCTSERVICE.getProductByPno(pno);
+            ProductDTO productDTO = PRODUCT_SERVICE.getProductByPno(pno);
             req.setAttribute("productDTO", productDTO);
             req.getRequestDispatcher("/WEB-INF/product/view.jsp").forward(req, resp);
         } catch (Exception e) {

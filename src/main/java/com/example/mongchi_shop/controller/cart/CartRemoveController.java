@@ -13,12 +13,12 @@ import java.io.IOException;
 @Log4j2
 @WebServlet("/cart/remove")
 public class CartRemoveController extends HttpServlet {
-    private final CartService CARTSERVICE = CartService.INSTANCE;
+    private final CartService CART_SERVICE = CartService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("/cart/remove(GET)...");
-        String[] checks = req.getParameterValues("check");
+        String[] checks = req.getParameterValues("checks");
         int[] cnos = new int[checks.length];
 
         for (int i = 0; i < checks.length; i++) {
@@ -26,7 +26,7 @@ public class CartRemoveController extends HttpServlet {
         }
 
         try {
-            CARTSERVICE.removeCart(cnos);
+            CART_SERVICE.removeCart(cnos);
             resp.sendRedirect("/cart/list");
         } catch (Exception e) {
             log.info(e.getMessage());

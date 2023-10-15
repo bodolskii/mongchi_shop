@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @Log4j2
-@WebServlet("/modifyPassword")
+@WebServlet("/members/modifyPassword")
 public class ModifyPasswordController extends HttpServlet {
     private final MemberService service=MemberService.INSTANCE;
 

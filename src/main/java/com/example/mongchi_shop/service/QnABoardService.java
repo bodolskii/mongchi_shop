@@ -37,6 +37,11 @@ public enum QnABoardService {
         log.info("service cnt"+cnt);
         return cnt;
     }
+    public int getMyQnAListCount(String emailId) throws Exception {
+        int cnt = qnABoardDAO.getQnAListCountEmail(emailId);
+        log.info(cnt+"COUNTCOUNT!!|");
+        return cnt;
+    }
 
     public List<QnABoardDTO> getQnABoardByPno(int pno, int currentPage, int limit) throws Exception {
 
@@ -72,6 +77,16 @@ public enum QnABoardService {
 
     public void removeQnABoard(int qno) throws Exception {
         qnABoardDAO.deleteQnABoard(qno);
+    }
+    public List<QnABoardDTO> getQnABoardByEmailId(String emailId, int currentPage, int limit) throws Exception {
+        // 마이페이지
+        log.info("emailId: "+emailId);
+        List<QnABoardVO> qnABoardVOList = qnABoardDAO.selectQnABoardByEmailId(emailId, currentPage, limit);
+        List<QnABoardDTO> qnABoardDTOList = new ArrayList<>();
+        for(QnABoardVO vo:qnABoardVOList) {
+            qnABoardDTOList.add(modelMapper.map(vo, QnABoardDTO.class));
+        }
+        return qnABoardDTOList;
     }
 
 

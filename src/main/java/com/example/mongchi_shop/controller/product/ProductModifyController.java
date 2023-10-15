@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/admin/products/modify")
 @MultipartConfig(maxFileSize = 5 * 1024 * 1024, location = "c:/upload")
 public class ProductModifyController extends HttpServlet {
-    private final ProductService PRODUCTSERVICE = ProductService.INSTANCE;
+    private final ProductService PRODUCT_SERVICE = ProductService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +28,7 @@ public class ProductModifyController extends HttpServlet {
         log.info("pno: " + pno);
 
         try {
-            ProductDTO productDTO = PRODUCTSERVICE.getProductByPno(pno);
+            ProductDTO productDTO = PRODUCT_SERVICE.getProductByPno(pno);
             log.info("productDTO: " + productDTO);
             req.setAttribute("productDTO", productDTO);
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class ProductModifyController extends HttpServlet {
         try {
             // 이미지 파일 저장을 위해 request로 부터 Part 객체 참조.
             Part part = req.getPart("file");
-            String fileName = PRODUCTSERVICE.getFileName(part);
+            String fileName = PRODUCT_SERVICE.getFileName(part);
             log.info("fileName: " + fileName);
             if (fileName != null && !fileName.isEmpty()) {
                 part.write(fileName); // 파일 이름이 있으면 파일 저장
@@ -58,7 +58,7 @@ public class ProductModifyController extends HttpServlet {
             // 이미지 파일 이름을 News 객체에 저장.
             productDTO.setFileName("/upload/" + fileName);
 
-            PRODUCTSERVICE.modifyProduct(productDTO);
+            PRODUCT_SERVICE.modifyProduct(productDTO);
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new ServletException("modify error");

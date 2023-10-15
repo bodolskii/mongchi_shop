@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/admin/products/register")
 @MultipartConfig(maxFileSize = 5 * 1024 * 1024, location = "c:/upload")
 public class ProductRegisterController extends HttpServlet {
-    private final ProductService PRODUCTSERVICE = ProductService.INSTANCE;
+    private final ProductService PRODUCT_SERVICE = ProductService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,7 +33,7 @@ public class ProductRegisterController extends HttpServlet {
         try {
             // 이미지 파일 저장을 위해 request로 부터 Part 객체 참조.
             Part part = req.getPart("file");
-            String fileName = PRODUCTSERVICE.getFileName(part);
+            String fileName = PRODUCT_SERVICE.getFileName(part);
             log.info("fileName: " + fileName);
             if (fileName != null && !fileName.isEmpty()) {
                 part.write(fileName); // 파일 이름이 있으면 파일 저장
@@ -43,9 +43,9 @@ public class ProductRegisterController extends HttpServlet {
             log.info("productDTO: " + productDTO);
 
             // 이미지 파일 이름을 News 객체에 저장.
-            productDTO.setFileName("/upload/" + fileName);
+            productDTO.setFileName("/upload/product" + fileName);
 
-            PRODUCTSERVICE.registerProduct(productDTO);
+            PRODUCT_SERVICE.registerProduct(productDTO);
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new ServletException("register error");

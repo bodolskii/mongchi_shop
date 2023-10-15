@@ -32,14 +32,17 @@ public class CartDAO {
             emailId = emailId == null ? "Guest" : emailId;
 
             int cnt = 1;
-            sql = "insert into cart (orderId, emailId, pno, cnt, addDate)" +
-                    " values (?, ?, ?, ?, now())";
+            sql = "insert into cart (orderId, emailId, cnt, addDate, pno, productName, unitPrice, fileName)" +
+                    " values (?, ?, ?, now(), ?, ?, ?, ?)";
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, cartVO.getOrderId());
             preparedStatement.setString(2, emailId);
-            preparedStatement.setInt(3, cartVO.getPno());
-            preparedStatement.setInt(4, cnt);
+            preparedStatement.setInt(3, cnt);
+            preparedStatement.setInt(4, cartVO.getPno());
+            preparedStatement.setString(5, cartVO.getProductName());
+            preparedStatement.setInt(6, cartVO.getUnitPrice());
+            preparedStatement.setString(7, cartVO.getFileName());
             preparedStatement.executeUpdate();
         }
     }
@@ -72,9 +75,12 @@ public class CartDAO {
                     .cno(resultSet.getInt("cno"))
                     .orderId(resultSet.getString("orderId"))
                     .emailId(resultSet.getString("emailId"))
-                    .pno(resultSet.getInt("pno"))
                     .cnt(resultSet.getInt("cnt"))
                     .addDate(resultSet.getString("addDate"))
+                    .pno(resultSet.getInt("pno"))
+                    .productName(resultSet.getString("productName"))
+                    .unitPrice(resultSet.getInt("unitPrice"))
+                    .fileName(resultSet.getString("fileName"))
                     .build();
             list.add(cartVO);
         }
@@ -90,5 +96,17 @@ public class CartDAO {
         preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, cno);
         preparedStatement.executeUpdate();
+    }
+
+    public boolean updateCnt(int cno, int cnt) throws SQLException {
+        // 전달받은 cnt 업데이트
+        String sql = "update cart set cnt = ? where cno = ?";
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, cnt);
+        preparedStatement.setInt(2, cno);
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        return rowsAffected > 0;
     }
 }

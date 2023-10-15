@@ -40,5 +40,6 @@ public class AddMemberController extends HttpServlet {
             log.info(e.getMessage());
             throw new ServletException("add error");
         }
+
     }
 }

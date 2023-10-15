@@ -26,6 +26,21 @@ public class QnABoardDAO {
         }
         return cnt;
     }
+    public int getQnAListCountEmail(String eamilId) throws Exception {
+
+        String sql="select count(*) from qna_board where emailId=?";
+        @Cleanup Connection connection= ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement=connection.prepareStatement(sql);
+        preparedStatement.setString(1, eamilId);
+        @Cleanup ResultSet resultSet=preparedStatement.executeQuery();
+
+        int cnt=0;
+        if(resultSet.next()) {
+            cnt=resultSet.getInt(1);
+            System.out.println("dao cnt: "+cnt);
+        }
+        return cnt;
+    }
 
     public QnABoardVO selectQnABoardByQno(int pno, int qno) throws Exception {
         // qna 세부 페이지
@@ -137,5 +152,38 @@ public class QnABoardDAO {
         preparedStatement.setInt(1, qno);
         preparedStatement.executeUpdate();
     }
+    public List<QnABoardVO> selectQnABoardByEmailId(String emailId, int currentPage, int limit) throws Exception {
+        // 마이페이지
+        String sql="select * from qna_board where emailId=? order by qno limit ?,?";
+
+        int beginRow=(currentPage-1)*limit;
+
+        @Cleanup Connection connection= ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement=connection.prepareStatement(sql);
+        preparedStatement.setString(1, emailId);
+        preparedStatement.setInt(2, beginRow);
+        preparedStatement.setInt(3, limit);
+        @Cleanup ResultSet resultSet=preparedStatement.executeQuery();
+
+        ArrayList<QnABoardVO> qnaList=new ArrayList<>();
+        if(resultSet.next()) {
+            QnABoardVO qnABoardVO = QnABoardVO.builder()
+                    .pno(resultSet.getInt("pno"))
+                    .questionDate(resultSet.getString("questionDate"))
+                    .answerDate(resultSet.getString("answerDate"))
+                    .questionContent(resultSet.getString("questionContent"))
+                    .qno(resultSet.getInt("qno"))
+                    .answerContent(resultSet.getString("answerContent"))
+                    .answered(resultSet.getBoolean("answered"))
+                    .emailId(emailId)
+                    .secreted(resultSet.getBoolean("secreted"))
+                    .productName(resultSet.getString("productName"))
+                    .build();
+            qnaList.add(qnABoardVO);
+        }
+
+        return qnaList;
+    }
+
 
 }

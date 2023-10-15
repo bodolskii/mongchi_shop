@@ -13,10 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Log4j2
-@WebFilter(urlPatterns = {"/modify"})
+@WebFilter(urlPatterns = {"/qnaBoards/*, /products/*, /members/*, /cart, /reviews/*"})
 public class LoginCheckFilter implements Filter {
-
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         log.info("Login Check Filter");
@@ -48,6 +46,7 @@ public class LoginCheckFilter implements Filter {
             try { // uuid에 해당하는 데이터 찾아서 session에 loginInfo 생성
                 // 데이터베이스 확인
                 MemberDTO memberDTO = MemberService.INSTANCE.getByUuid(uuid);
+                session.setAttribute("loginInfo", memberDTO);
 
                 log.info("쿠키의 값으로 조회한 사용자 정보: " + memberDTO);
 

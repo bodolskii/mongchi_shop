@@ -13,7 +13,7 @@ import java.io.IOException;
 @Log4j2
 @WebServlet("/admin/products/remove")
 public class ProductRemoveController extends HttpServlet {
-    private final ProductService PRODUCTSERVICE = ProductService.INSTANCE;
+    private final ProductService PRODUCT_SERVICE = ProductService.INSTANCE;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("/admin/products/remove(GET)...");
@@ -21,7 +21,7 @@ public class ProductRemoveController extends HttpServlet {
         log.info("pno: " + pno);
 
         try {
-            PRODUCTSERVICE.removeProduct(pno);
+            PRODUCT_SERVICE.removeProduct(pno);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new ServletException("remove error");

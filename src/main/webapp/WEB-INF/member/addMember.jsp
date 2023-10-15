@@ -1,31 +1,57 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 2023-09-24
-  Time: 오후 3:49
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>회원가입</title>
+    <!-- Add Bootstrap CSS (you may need to provide the correct Bootstrap CSS URL) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-
 <body>
-
+<jsp:include page="/WEB-INF/inc/menu.jsp"/>
+<div class="container">
     <form action="/addMember" method="post">
-        <p>이메일<input type="email" name="emailId"></p><span class="memberEmailCheck"></span>
-        <p>비번<input type="password" name="password"></p>
-        <p>비번확인<input type="password" name="password2"></p><span class="passCheck"></span>
-       <p>이름 <input type="text" name="memberName"></p>
-        <p>전화번호 <input type="text" name="phone"></p>
-        <p> 생일 <input type="date" name="birthday"></p>
-        <p> 우편번호 <input type="text" name="zipCode" id="zipCode" placeholder="우편번호" ></p><input type="button" name="findCode" value="우편번호 찾기"><br></p>
-        <p> 번지수/도로명 <input type="text" name="address01" id="address01" placeholder="주소"></p>
-        <p> 상세주소 <input type="text" name="address02"  id="address02" placeholder="상세주소"></p>
-
-        <button type="submit">회원가입</button>
+        <div class="form-group">
+            <label>이메일</label>
+            <input type="email" name="emailId" class="form-control">
+            <span class="memberEmailCheck"></span>
+        </div>
+        <div class="form-group">
+            <label>비번</label>
+            <input type="password" name="password" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>비번확인</label>
+            <input type="password" name="password2" class="form-control">
+            <span class="passCheck"></span>
+        </div>
+        <div class="form-group">
+            <label>이름</label>
+            <input type="text" name="memberName" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>전화번호</label>
+            <input type="text" name="phone" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>생일</label>
+            <input type="date" name="birthday" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="zipCode">우편번호</label>
+            <input type="text" name="zipCode" id="zipCode" class="form-control" placeholder="우편번호">
+            <input type="button" name="findCode" class="btn btn-primary" value="우편번호 찾기"/>
+        </div>
+        <div class="form-group">
+            <label for="address01">번지수/도로명</label>
+            <input type="text" name="address01" id="address01" class="form-control" placeholder="주소">
+        </div>
+        <div class="form-group">
+            <label for="address02">상세주소</label>
+            <input type="text" name="address02" id="address02" class="form-control" placeholder="상세주소">
+        </div>
+        <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
+</div>
+<jsp:include page="/WEB-INF/inc/footer.jsp"/>
 </body>
 <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
 <script>

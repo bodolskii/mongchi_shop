@@ -18,10 +18,10 @@
   <div>상품설명: <textarea name="description" cols="30" rows="10" required></textarea></div>
   <div>
     상품종류:
-    티셔츠<input type="radio" name="category" value="티셔츠">
-    케이스<input type="radio" name="category" value="케이스">
-    파우치<input type="radio" name="category" value="파우치">
-    에코백<input type="radio" name="category" value="에코백">
+    티셔츠<input type="radio" name="category" value="T_shirt">
+    케이스<input type="radio" name="category" value="Case">
+    파우치<input type="radio" name="category" value="Pouch">
+    에코백<input type="radio" name="category" value="Echo_bag">
   </div>
   <div>상품재고: <input type="number" name="unitsInstock" required></div>
   <div><input type="file" name="file"></div>
