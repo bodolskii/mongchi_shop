@@ -35,7 +35,8 @@
                     <a class="nav-link" id="cart" href="/member/mypage"> 장바구니 </a>
                 </li>
                 <li><a class="nav-link" href="/member/myQnA"> QnA </a></li>
-                <li><a class="nav-link" id="review"> 리뷰 </a></li>
+                <li><a class="nav-link" href="/review/myReview"> 나의 리뷰 </a></li>
+                <li><a class="nav-link" href="/member/modify"> 내정보수정 </a></li>
             </ul>
         </div>
     </div>

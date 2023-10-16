@@ -26,21 +26,20 @@ public class ReviewListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // productViewController로 이동.
-//        try {
-//            // ReviewService에서 리뷰 데이터를 가져오기
-//            List<ReviewVO> reviewVOList = reviewService.getReview(req);
-//            log.info(reviewVOList);
-//
-//            // 리뷰 데이터를 request에 attribute로 추가
-//            req.setAttribute("reviewVOList", reviewVOList);
-//
-//            // list.jsp로 포워딩
-//            req.getRequestDispatcher("/WEB-INF/review/list.jsp").forward(req, resp);
-//        } catch (SQLException | ClassNotFoundException ex) {
-//            log.error("Error processing doGet", ex);
-//            throw new ServletException("Error processing doGet", ex);
-//        }
+        try {
+            // ReviewService에서 리뷰 데이터를 가져오기
+            List<ReviewVO> reviewVOList = reviewService.getReview(req);
+            log.info(reviewVOList);
+
+            // 리뷰 데이터를 request에 attribute로 추가
+            req.setAttribute("reviewVOList", reviewVOList);
+
+            // list.jsp로 포워딩
+            req.getRequestDispatcher("/WEB-INF/review/list.jsp").forward(req, resp);
+        } catch (SQLException | ClassNotFoundException ex) {
+            log.error("Error processing doGet", ex);
+            throw new ServletException("Error processing doGet", ex);
+        }
 
     }
 
@@ -56,7 +55,7 @@ public class ReviewListController extends HttpServlet {
 
         // 리스트 목록
         try {
-            List<ReviewVO> reviewVOS = reviewService.getReview(1);
+            List<ReviewVO> reviewVOS = reviewService.getReview(req);
             JSONArray jsonArray = new JSONArray();
             log.info("review " + reviewVOS);
             for (ReviewVO reviewVO : reviewVOS) {

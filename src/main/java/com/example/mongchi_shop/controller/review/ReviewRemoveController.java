@@ -27,7 +27,7 @@ public class ReviewRemoveController extends HttpServlet {
             throw new ServletException("remove error...");
         }
         log.info("pno : " + req.getParameter("pno"));
-        resp.sendRedirect("/review/list?pno=" + req.getParameter("pno"));
+        resp.sendRedirect("/review/myReview");
     }
 
 }

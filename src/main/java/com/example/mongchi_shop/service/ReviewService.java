@@ -7,8 +7,10 @@ import com.example.mongchi_shop.util.MapperUtil;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -44,22 +46,37 @@ public enum ReviewService {
         reviewDAO.insertReview(reviewVO);
     }
 
-    public List<ReviewVO> getReview(int pno) throws SQLException, ClassNotFoundException {
+    public List<ReviewVO> getReview(HttpServletRequest request) throws SQLException, ClassNotFoundException {
         log.info("getReview()...");
 
-        List<ReviewVO> reviewVOList = reviewDAO.selectReview(pno);
-        reviewVOList.forEach(review -> log.info(review));
+        int pno = Integer.parseInt(request.getParameter("pno"));
 
-//        // 댓글 중 로그인한 사용자가 작성한 댓글이면 isLogin 값을 true로 변경
-//        for (ReviewVO reviewVO : reviewVOList) {
-//            log.info(reviewVO.getEmailId());
-//           /* log.info(request.getSession().getAttribute("sessionMemberId"));
-//
-//            if (reviewVO.getEmailId().equals(request.getSession.getAttribute("sessionMemberId")))
-//            // 댓글 작성자와 로그인한 사용자가 같은 경우
-//            reviewVO.setLogin(true);*/
-//        }
+        List<ReviewVO> reviewVOList = reviewDAO.selectReview(pno);
+        log.info(reviewVOList);
+
+        // 댓글 중 로그인한 사용자가 작성한 댓글이면 isLogin 값을 true로 변경
+        for (ReviewVO reviewVO : reviewVOList) {
+            log.info(reviewVO.getEmailId());
+           /* log.info(request.getSession().getAttribute("sessionMemberId"));
+
+            if (reviewVO.getEmailId().equals(request.getSession.getAttribute("sessionMemberId")))
+            // 댓글 작성자와 로그인한 사용자가 같은 경우
+            reviewVO.setLogin(true);*/
+        }
     return reviewVOList;
+    }
+
+    public List<ReviewDTO> getReviewByEmailId(String emailId) throws Exception {
+
+        log.info("getReviewByEmailId()... ");
+        List<ReviewVO> reviewVOList = reviewDAO.selectReviewByEmailId(emailId);
+        List<ReviewDTO> reviewDTOList = new ArrayList<>();
+
+        for (ReviewVO reviewVO : reviewVOList) {
+            log.info(reviewVO.getEmailId());
+            reviewDTOList.add(modelMapper.map(reviewVO,ReviewDTO.class));
+        }
+        return reviewDTOList;
     }
 
     public ReviewDTO getReviewByPno(int pno, int rno) throws SQLException {

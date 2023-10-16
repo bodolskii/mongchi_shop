@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Log4j2
 @WebServlet ("/review/add")
-@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload/review")
+@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload")
 public class ReviewAddController extends HttpServlet {
     private final ReviewService reviewService = ReviewService.INSTANCE;
 
@@ -48,7 +48,7 @@ public class ReviewAddController extends HttpServlet {
             MemberDTO memberDTO = (MemberDTO) session.getAttribute("loginInfo");
             String emailId = memberDTO.getEmailId();
             reviewDTO.setEmailId(emailId);
-            reviewDTO.setFileName("/upload/review/" + fileName);
+            reviewDTO.setFileName("/upload/" + fileName);
 
             log.info(reviewDTO);   
             reviewService.addReview(reviewDTO);

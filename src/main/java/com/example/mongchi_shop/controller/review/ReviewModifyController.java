@@ -71,6 +71,6 @@ public class ReviewModifyController extends HttpServlet {
             log.error(e.getMessage());
             throw new ServletException("ReviewModify doPost error");
         }
-        resp.sendRedirect("/review/list?pno=" + req.getParameter("pno"));
+        resp.sendRedirect("/review/myReview");
     }
 }

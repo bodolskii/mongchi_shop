@@ -35,7 +35,7 @@ public class ReviewDAO {
         log.info("pno : " + pno);
 
         List<ReviewVO> reviewVOList = new ArrayList<>();
-        String sql = "SELECT * FROM `review` WHERE `pno` = ? ORDER BY rno DESC";
+        String sql = "SELECT * FROM `review` WHERE `pno` = ? ORDER BY DESC ";
 
         @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -45,6 +45,30 @@ public class ReviewDAO {
             ReviewVO reviewVO = ReviewVO.builder()
                     .rno((resultSet.getInt("rno")))
                     .emailId(resultSet.getString("emailId"))
+                    .pno(resultSet.getInt("pno"))
+                    .rate(resultSet.getInt("rate"))
+                    .content(resultSet.getString("content"))
+                    .addDate(resultSet.getString("addDate"))
+                    .fileName(resultSet.getString("fileName"))
+                    .build();
+            reviewVOList.add(reviewVO);
+        }
+        return reviewVOList;
+    }
+
+    public List<ReviewVO> selectReviewByEmailId(String emailId) throws SQLException {
+        log.info("selectReview()...");
+
+        List<ReviewVO> reviewVOList = new ArrayList<>();
+        String sql = "SELECT * FROM `review` WHERE `emailId` = ? ";
+
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,emailId);
+        @Cleanup ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            ReviewVO reviewVO = ReviewVO.builder()
+                    .rno((resultSet.getInt("rno")))
                     .pno(resultSet.getInt("pno"))
                     .rate(resultSet.getInt("rate"))
                     .content(resultSet.getString("content"))
