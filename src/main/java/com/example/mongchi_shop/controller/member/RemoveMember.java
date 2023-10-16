@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Log4j2
-@WebServlet("/members/removeMember")
+@WebServlet("/member/removeMember")
 public class RemoveMember extends HttpServlet {
     private final MemberService service = MemberService.INSTANCE;
 

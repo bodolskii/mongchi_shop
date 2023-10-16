@@ -16,16 +16,16 @@
         </div>
         <div class="form-group">
             <label>비번</label>
-            <input type="password" name="password" class="form-control">
+            <input type="password" name="password" class="form-control" required>
         </div>
         <div class="form-group">
             <label>비번확인</label>
-            <input type="password" name="password2" class="form-control">
+            <input type="password" name="password2" class="form-control" required>
             <span class="passCheck"></span>
         </div>
         <div class="form-group">
             <label>이름</label>
-            <input type="text" name="memberName" class="form-control">
+            <input type="text" name="memberName" class="form-control" required>
         </div>
         <div class="form-group">
             <label>전화번호</label>

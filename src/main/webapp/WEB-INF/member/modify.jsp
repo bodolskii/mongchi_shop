@@ -9,7 +9,7 @@
 <body>
 <jsp:include page="/WEB-INF/inc/menu.jsp" />
 <div class="container">
-    <form action="/members/modify" method="post">
+    <form action="/member/modify" method="post">
         <div class="form-group">
             <label>이메일</label>
             <input type="email" name="emailId" value="${dto.emailId}" class="form-control" readonly>

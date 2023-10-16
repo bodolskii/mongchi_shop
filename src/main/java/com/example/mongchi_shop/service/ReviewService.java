@@ -2,16 +2,12 @@ package com.example.mongchi_shop.service;
 
 import com.example.mongchi_shop.dao.ReviewDAO;
 import com.example.mongchi_shop.domain.ReviewVO;
-import com.example.mongchi_shop.dto.MemberDTO;
+import com.example.mongchi_shop.dto.ReviewDTO;
 import com.example.mongchi_shop.util.MapperUtil;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,13 +16,12 @@ public enum ReviewService {
     INSTANCE;
     private ModelMapper modelMapper;
     private ReviewDAO reviewDAO;
-
     ReviewService() {
         reviewDAO = new ReviewDAO();
         modelMapper = MapperUtil.INSTANCE.getInstance();
     }
 
-    private String getFileName(Part part) {
+    public String getFileName(Part part) {
         /* part 객체로 전달된 이미지 파일로 부터 파일 이름을 추출하기 위한 메서드 */
         String fileName = null;
 
@@ -41,65 +36,54 @@ public enum ReviewService {
         return fileName;
     }
 
-    public boolean addReview(HttpServletRequest request) throws SQLException, ServletException, IOException {
+    public void addReview(ReviewDTO reviewDTO) throws SQLException {
         log.info("addReview()...");
 
-        // 사용자 입력 받아오기
-        HttpSession session = request.getSession();
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute("loginInfo");
-        String emailId = memberDTO.getEmailId();
-        int pno = Integer.parseInt(request.getParameter("pno"));
-        log.info(pno);
-        int rate = Integer.parseInt(request.getParameter("rate"));
-        log.info(rate);
-        String content = request.getParameter("content");
-        String addDate = request.getParameter("addDate");
-
-        Part part = request.getPart("fileName");
-        String fileName = this.getFileName(part);
-        log.info("try : " + fileName);
-        if (fileName != null && !fileName.isEmpty()) {
-            log.info("fileSave");
-            part.write(fileName);
-        }
-            // 사용자 입력 기반으로 ReviewVO 생성
-        ReviewVO reviewVO = ReviewVO.builder()
-                .emailId(emailId)
-                .pno(pno)
-                .rate(rate)
-                .content(content)
-                .addDate(addDate)
-                .fileName("/upload/" + fileName)
-                .build();
-        return reviewDAO.insertReview(reviewVO);
+        ReviewVO reviewVO = modelMapper.map(reviewDTO, ReviewVO.class);
+        log.info("reviewVO : " + reviewVO);
+        reviewDAO.insertReview(reviewVO);
     }
-    public List<ReviewVO> getReview(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+
+    public List<ReviewVO> getReview(int pno) throws SQLException, ClassNotFoundException {
         log.info("getReview()...");
 
-        int pno = Integer.parseInt(request.getParameter("pno"));
-
         List<ReviewVO> reviewVOList = reviewDAO.selectReview(pno);
-        log.info(reviewVOList);
+        reviewVOList.forEach(review -> log.info(review));
 
-        // 댓글 중 로그인한 사용자가 작성한 댓글이면 isLogin 값을 true로 변경
-        for (ReviewVO reviewVO : reviewVOList) {
-            log.info(reviewVO.getEmailId());
-           /* log.info(request.getSession().getAttribute("sessionMemberId"));
-
-            if (reviewVO.getEmailId().equals(request.getSession.getAttribute("sessionMemberId")))
-            // 댓글 작성자와 로그인한 사용자가 같은 경우
-            reviewVO.setLogin(true);*/
-        }
+//        // 댓글 중 로그인한 사용자가 작성한 댓글이면 isLogin 값을 true로 변경
+//        for (ReviewVO reviewVO : reviewVOList) {
+//            log.info(reviewVO.getEmailId());
+//           /* log.info(request.getSession().getAttribute("sessionMemberId"));
+//
+//            if (reviewVO.getEmailId().equals(request.getSession.getAttribute("sessionMemberId")))
+//            // 댓글 작성자와 로그인한 사용자가 같은 경우
+//            reviewVO.setLogin(true);*/
+//        }
     return reviewVOList;
     }
 
-    /* 리뷰 삭제 */
-    public boolean removeReview(HttpServletRequest request) throws SQLException {
-        log.info("removeReview()...");
-        int rno = Integer.parseInt(request.getParameter("rno"));
+    public ReviewDTO getReviewByPno(int pno, int rno) throws SQLException {
+        log.info("getReviewByPno()...");
+        ReviewVO reviewVO = reviewDAO.selecetReviewByPno(pno,rno);
+        log.info(reviewVO);
+        ReviewDTO reviewDTO = modelMapper.map(reviewVO,ReviewDTO.class);
+        log.info("reviewDTO : " + reviewDTO);
+        return reviewDTO;
+    }
 
-        log.info(rno);
-        return reviewDAO.deleteReview(rno);
+    /* 리뷰 수정 */
+    public void modifyReview(ReviewDTO reviewDTO) throws SQLException {
+        log.info("modifyReview()... ");
+        log.info("reviewDTO : " + reviewDTO);
+        ReviewVO reviewVO = modelMapper.map(reviewDTO, ReviewVO.class);
+
+        log.info("reviewVO : " + reviewVO);
+        reviewDAO.updateReview(reviewVO);
+    }
+
+    /* 리뷰 삭제 */
+    public void removeReview(int rno) throws SQLException {
+        reviewDAO.deleteReview(rno);
     }
 
 
@@ -115,4 +99,5 @@ public enum ReviewService {
         System.out.println("rate: " + reviewVO.getRate());
         System.out.println("content: " + reviewVO.getContent());
     }
+
 }

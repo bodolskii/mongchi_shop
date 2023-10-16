@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Log4j2
-@WebServlet("/members/myQnA")
+@WebServlet("/member/myQnA")
 public class MypageQnA extends HttpServlet {
     final int ROW_PER_PAGE = 10; // 페이지에 보일 주문 개수
     private final QnABoardService qnaBoardService = QnABoardService.INSTANCE;

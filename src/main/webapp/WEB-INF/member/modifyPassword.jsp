@@ -7,7 +7,7 @@
 <body>
 <jsp:include page="/WEB-INF/inc/menu.jsp"/>
 <div class="container">
-        <form method="post" action="/members/modifyPassword">
+        <form method="post" action="/member/modifyPassword">
                 <div class="form-group">
                         <label >새 비밀번호</label>
                         <input type="password" name="password" id="password" class="form-control" required style="width: 40%">

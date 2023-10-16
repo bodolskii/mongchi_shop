@@ -40,6 +40,9 @@ dependencies {
   // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
   implementation 'com.zaxxer:HikariCP:5.0.1'
 
+  // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+  implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
   // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
   implementation 'org.modelmapper:modelmapper:3.0.0'
 

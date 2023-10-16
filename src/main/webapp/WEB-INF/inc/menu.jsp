@@ -53,7 +53,7 @@
                         <li><a class="nav-link" href="/logout">LogOut</a></li>
                     </c:otherwise>
                 </c:choose>
-                <li><a class="nav-link" href="#"><img src="/images/user.svg"></a></li>
+                <li><a class="nav-link" href="/member/mypage"><img src="/images/user.svg"></a></li>
                 <li><a class="nav-link" href="/cart/list"><img src="/images/cart.svg"></a></li>
             </ul>
         </div>

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Log4j2
-@WebServlet("/members/modify")
+@WebServlet("/member/modify")
 public class ModifyController extends HttpServlet {
     private final MemberService service = MemberService.INSTANCE;
     @Override
