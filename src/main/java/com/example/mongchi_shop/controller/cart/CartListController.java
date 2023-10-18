@@ -1,7 +1,6 @@
 package com.example.mongchi_shop.controller.cart;
 
 import com.example.mongchi_shop.dto.CartDTO;
-import com.example.mongchi_shop.dto.MemberDTO;
 import com.example.mongchi_shop.service.CartService;
 import lombok.extern.log4j.Log4j2;
 

@@ -1,6 +1,8 @@
 <%@ page import="com.example.mongchi_shop.dto.ProductDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.mongchi_shop.dto.CartDTO" %><%--
+<%@ page import="com.example.mongchi_shop.dto.CartDTO" %>
+<%@ page import="com.example.mongchi_shop.dto.OrderDTO" %>
+<%@ page import="com.example.mongchi_shop.dto.OrderItemDTO" %><%--
   Created by IntelliJ IDEA.
   User: Admin
   Date: 2023-10-13
@@ -10,7 +12,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-    List<CartDTO> cartDTOList = (List<CartDTO>) session.getAttribute("cartDTOList");
+    List<OrderDTO> orderDTOList = (List<OrderDTO>) request.getAttribute("orderDTOList");
 %>
 
 <html>
@@ -21,14 +23,11 @@
 <body>
 <jsp:include page="/WEB-INF/inc/menu.jsp"/>
 <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
-
     <div class="container">
-        <a class="navbar-brand">마이 페이지<span>.</span></a>
-
+        <a class="navbar-brand">주문내역<span>.</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarsFurni">
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                 <li class="nav-item active">
@@ -51,30 +50,49 @@
                 <div class="site-blocks-table">
                     <table class="table">
                         <thead>
+
                         <tr>
-                            <th class="product-thumbnail">Image</th>
-                            <th class="product-name">Product</th>
-                            <th class="product-price">Price</th>
-                            <th class="product-quantity">Quantity</th>
+                            <th class="product-thumbnail">상품정보</th>
+                            <th class="product-name">주문일자</th>
+                            <th class="product-quantity">주문번호</th>
+                            <th class="product-quantity">주문금액(수량)</th>
+                            <th class="product-quantity">주문상태</th>
+                            <th class="product-quantity">비고</th>
                         </tr>
                         </thead>
                         <tbody>
+
                         <%
-                            int total = 0; // 총 주문금액
-                            for (CartDTO cart : cartDTOList) {
-                                int price = cart.getUnitPrice() * cart.getCnt();
-                                total += price;
+                            for (OrderDTO order : orderDTOList) {
                         %>
-                        <tr>
-                            <td class="product-thumbnail">
-                                <img src="<%= cart.getFileName() %>" alt="Image" class="img-fluid">
-                            </td>
-                            <td class="product-name">
-                                <h2 class="h5 text-black"><%= cart.getProductName() %></h2>
-                            </td>
-                            <td><%= cart.getUnitPrice() %>원</td>
-                            <td><%= cart.getCnt() %></td>
-                        </tr>
+                            <%
+                                for (OrderItemDTO itemDTO : order.getItemDTOList()) {
+                            %>
+                            <tr>
+                                <td class="product-thumbnail">
+                                    <img src="<%= itemDTO.getFileName() %>">
+                                    <span><%= itemDTO.getProductName() %></span>
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black"><%= order.getOrderDate() %></h2>
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black"><%= order.getOrderId() %></h2>
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black"><%= itemDTO.getUnitPrice() * itemDTO.getCnt() %>원</h2>
+                                    <span><%= itemDTO.getCnt() %>개</span>
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black"><%= order.getOrderStatus() %></h2>
+                                </td>
+                                <td>
+                                    <button>리뷰작성</button>
+                                </td>
+                            </tr>
+                            <%
+                                }
+                            %>
                         <%
                             }
                         %>

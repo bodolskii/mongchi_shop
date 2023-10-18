@@ -1,5 +1,6 @@
 package com.example.mongchi_shop.dao;
 
+import com.example.mongchi_shop.domain.OrderItemVO;
 import com.example.mongchi_shop.domain.OrderVO;
 import lombok.Cleanup;
 
@@ -27,6 +28,22 @@ public class OrderDAO {
         preparedStatement.setString(7, orderVO.getAddress01());
         preparedStatement.setString(8, orderVO.getAddress02());
         preparedStatement.setString(9, orderVO.getOrderStatus());
+        int rowsAffected = preparedStatement.executeUpdate();
+        return rowsAffected > 0;
+    }
+
+    // 주문 아이템 생성
+    public boolean insertOrderItem(OrderItemVO orderItemVO) throws SQLException {
+        String sql = "INSERT INTO order_items (orderId, pno, productName, cnt, unitPrice, fileName)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, orderItemVO.getOrderId());
+        preparedStatement.setInt(2, orderItemVO.getPno());
+        preparedStatement.setString(3, orderItemVO.getProductName());
+        preparedStatement.setInt(4, orderItemVO.getCnt());
+        preparedStatement.setInt(5, orderItemVO.getUnitPrice());
+        preparedStatement.setString(6, orderItemVO.getFileName());
         int rowsAffected = preparedStatement.executeUpdate();
         return rowsAffected > 0;
     }
@@ -67,8 +84,9 @@ public class OrderDAO {
         while (resultSet.next()) {
             OrderVO orderVO = OrderVO.builder()
                     .ono(resultSet.getInt("ono"))
-                    .orderId(resultSet.getString("order_id"))
+                    .orderId(resultSet.getString("orderId"))
                     .emailId(resultSet.getString("emailId"))
+                    .orderName(resultSet.getString("orderName"))
                     .orderDate(resultSet.getString("orderDate"))
                     .totalAmount(resultSet.getInt("totalAmount"))
                     .phone(resultSet.getString("phone"))
@@ -81,6 +99,30 @@ public class OrderDAO {
         }
 
         return orderVOList;
+    }
+
+    // 주문 목록 조회
+    public List<OrderItemVO> selectOrderItemById(String orderId) throws SQLException {
+        List<OrderItemVO> itemVOList = new ArrayList<>();
+        String sql = "SELECT * FROM order_items where orderId = ?";
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, orderId);
+        @Cleanup ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            OrderItemVO itemVO = OrderItemVO.builder()
+                    .ino(resultSet.getInt("ino"))
+                    .orderId(resultSet.getString("orderId"))
+                    .pno(resultSet.getInt("pno"))
+                    .productName(resultSet.getString("productName"))
+                    .cnt(resultSet.getInt("cnt"))
+                    .unitPrice(resultSet.getInt("unitPrice"))
+                    .fileName(resultSet.getString("fileName"))
+                    .build();
+            itemVOList.add(itemVO);
+        }
+
+        return itemVOList;
     }
 
     // 주문 업데이트

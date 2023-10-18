@@ -2,6 +2,7 @@ package com.example.mongchi_shop.controller.cart;
 
 import com.example.mongchi_shop.dto.CartDTO;
 import com.example.mongchi_shop.dto.OrderDTO;
+import com.example.mongchi_shop.dto.OrderItemDTO;
 import com.example.mongchi_shop.service.CartService;
 import com.example.mongchi_shop.service.OrderService;
 import lombok.extern.log4j.Log4j2;
@@ -14,10 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
-@WebServlet("/shippingInfo")
+@WebServlet("/cart/shippingInfo")
 public class shippingInfoController extends HttpServlet {
     private final OrderService ORDER_SERVICE = OrderService.INSTANCE;
     private final CartService CART_SERVICE = CartService.INSTANCE;
@@ -41,11 +43,25 @@ public class shippingInfoController extends HttpServlet {
         String orderId = (String) session.getAttribute("orderId");
 
         OrderDTO orderDTO = new OrderDTO();
+        List<OrderItemDTO> itemDTOList = new ArrayList<>();
         try {
             BeanUtils.populate(orderDTO, req.getParameterMap());
             log.info("orderDTO: " + orderDTO);
 
-            boolean isRegister = ORDER_SERVICE.registerOrder(orderDTO);
+            // 주문한 상품 데이터 List에 담기
+            for (CartDTO cartDTO : cartDTOList) {
+                OrderItemDTO orderItemDTO = OrderItemDTO.builder()
+                        .orderId(orderId)
+                        .pno(cartDTO.getPno())
+                        .productName(cartDTO.getProductName())
+                        .cnt(cartDTO.getCnt())
+                        .unitPrice(cartDTO.getUnitPrice())
+                        .fileName(cartDTO.getFileName())
+                        .build();
+                itemDTOList.add(orderItemDTO);
+            }
+
+            boolean isRegister = ORDER_SERVICE.registerOrder(orderDTO, itemDTOList);
             if (isRegister) {
                 int[] cnos = new int[cartDTOList.size()]; // 장바구니 번호 배열 생성
                 int i = 0;

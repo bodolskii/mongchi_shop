@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +23,5 @@ public class OrderDTO {
     private String address01; // 주소1
     private String address02; // 주소2
     private String orderStatus; // 주문상태
+    private List<OrderItemDTO> itemDTOList; // 주문 상품 정보 리스트
 }

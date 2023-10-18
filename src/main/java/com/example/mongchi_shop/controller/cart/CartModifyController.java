@@ -33,7 +33,7 @@ public class CartModifyController extends HttpServlet {
         try {
             boolean isModify = CART_SERVICE.modifyCnt(cno, cnt);
             if (isModify) {
-                for (CartDTO cartDTO : cartDTOList) {
+                for (CartDTO cartDTO : cartDTOList) { // 세션에 저장된 cartDTOList 업데이트
                     if (cartDTO.getCno() == cno) {
                         cartDTO.setCnt(cnt);
                         session.setAttribute("cartDTOList", cartDTOList);

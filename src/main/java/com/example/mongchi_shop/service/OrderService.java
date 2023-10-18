@@ -1,8 +1,10 @@
 package com.example.mongchi_shop.service;
 
 import com.example.mongchi_shop.dao.OrderDAO;
+import com.example.mongchi_shop.domain.OrderItemVO;
 import com.example.mongchi_shop.domain.OrderVO;
 import com.example.mongchi_shop.dto.OrderDTO;
+import com.example.mongchi_shop.dto.OrderItemDTO;
 import com.example.mongchi_shop.util.MapperUtil;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -22,7 +24,7 @@ public enum OrderService {
         modelMapper = MapperUtil.INSTANCE.getInstance();
     }
 
-    public boolean registerOrder(OrderDTO orderDTO) throws SQLException {
+    public boolean registerOrder(OrderDTO orderDTO, List<OrderItemDTO> itemDTOList) throws SQLException {
         log.info("registerOrder(OrderDTO orderDTO)...");
         log.info("orderDTO : " + orderDTO);
 
@@ -30,6 +32,12 @@ public enum OrderService {
         log.info("orderVO : " + orderVO);
 
         boolean isRegister = orderDAO.insertOrder(orderVO);
+        List<OrderItemDTO> dtoList = itemDTOList;
+        for (OrderItemDTO orderItemDTO : dtoList) {
+            OrderItemVO orderItemVO = modelMapper.map(orderItemDTO,OrderItemVO.class);
+            orderDAO.insertOrderItem(orderItemVO);
+        }
+
         return isRegister;
     }
 
@@ -50,6 +58,15 @@ public enum OrderService {
         List<OrderDTO> orderDTOList = new ArrayList<>();
         for (OrderVO orderVO : orderVOList) {
             OrderDTO orderDTO = modelMapper.map(orderVO, OrderDTO.class);
+
+            List<OrderItemVO> itemVOList = orderDAO.selectOrderItemById(orderVO.getOrderId());
+            List<OrderItemDTO> itemDTOList = new ArrayList<>();
+            for (OrderItemVO itemVO : itemVOList) {
+                OrderItemDTO itemDTO = modelMapper.map(itemVO, OrderItemDTO.class);
+                itemDTOList.add(itemDTO);
+            }
+
+            orderDTO.setItemDTOList(itemDTOList);
             orderDTOList.add(orderDTO);
         }
 
