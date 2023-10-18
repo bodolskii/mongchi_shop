@@ -42,6 +42,7 @@
             overflow: hidden;
             pointer-events: none;
         }
+
     </style>
     <%-- 별점 style/ --%>
 </head>

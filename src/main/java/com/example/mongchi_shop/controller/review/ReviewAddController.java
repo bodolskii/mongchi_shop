@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Log4j2
 @WebServlet ("/review/add")
-@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload")
+@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload/review")
 public class ReviewAddController extends HttpServlet {
     private final ReviewService reviewService = ReviewService.INSTANCE;
 
@@ -22,7 +22,7 @@ public class ReviewAddController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("/review/add doGet()...");
 
-        req.getRequestDispatcher("/WEB-INF/review/list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/review/add.jsp").forward(req, resp);
     }
 
     @Override
@@ -38,6 +38,7 @@ public class ReviewAddController extends HttpServlet {
             String fileName = reviewService.getFileName(part);
             log.info("part : " + part);
             log.info("fileName : " + fileName);
+
             if (fileName != null && !fileName.isEmpty()) {
                 log.info("fileSave");
                 part.write(fileName);
@@ -48,8 +49,11 @@ public class ReviewAddController extends HttpServlet {
             MemberDTO memberDTO = (MemberDTO) session.getAttribute("loginInfo");
             String emailId = memberDTO.getEmailId();
             reviewDTO.setEmailId(emailId);
-            reviewDTO.setFileName("/upload/" + fileName);
+            reviewDTO.setFileName("/upload/review/" + fileName);
 
+            if (fileName == null || fileName.isEmpty()) {
+                reviewDTO.setFileName("/upload/review/" + "logo.png");
+            }
             log.info(reviewDTO);   
             reviewService.addReview(reviewDTO);
 

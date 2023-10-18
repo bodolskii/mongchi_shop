@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @Log4j2
 @WebServlet("/review/modify")
-@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload")
+@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload/review")
 public class ReviewModifyController extends HttpServlet {
 
     private final ReviewService reviewService = ReviewService.INSTANCE;
@@ -57,15 +57,17 @@ public class ReviewModifyController extends HttpServlet {
             String fileName = reviewService.getFileName(part);
             log.info("fileName = " + fileName);
             BeanUtils.populate(reviewDTO,req.getParameterMap());
-            
-            if (!fileName.isEmpty()) {
-                reviewDTO.setFileName("/upload/" + fileName);
+
                 /* 새로 업로드 될 파일 */
-            }
-            else {
-                reviewDTO.setFileName(req.getParameter("orifileName"));
+            if (!fileName.isEmpty()) {
+                reviewDTO.setFileName("/upload/review/" + fileName);
+                part.write(fileName);
+
+            } else {
                 /* 기존의 파일 */
+                reviewDTO.setFileName(req.getParameter("orifileName"));
             }
+            
             reviewService.modifyReview(reviewDTO);
         } catch (Exception e){
             log.error(e.getMessage());

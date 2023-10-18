@@ -18,7 +18,7 @@ import java.util.List;
 
 @Log4j2
 @WebServlet ("/review/*")
-@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload")
+@MultipartConfig(maxFileSize = 10 * 1024 * 1024, location = "c:/upload/review")
 public class ReviewListController extends HttpServlet {
 
     ReviewService reviewService = ReviewService.INSTANCE;

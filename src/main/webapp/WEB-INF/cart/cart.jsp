@@ -5,7 +5,20 @@
 <%
     List<CartDTO> cartDTOList = (List<CartDTO>) session.getAttribute("cartDTOList");
 %>
-
+<%--
+  Created by IntelliJ IDEA.
+  User: 이헌구
+  Date: 2023-10-03
+  Time: 오후 4:35
+  To change this template use File | Settings | File Templates.
+--%>
+<!-- /*
+* Bootstrap 5
+* Template Name: Furni
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
 <html>
 <head>
     <title>장바구니</title>
@@ -66,7 +79,10 @@
                                     <td class="product-name">
                                         <h2 class="h5 text-black"><%= cart.getProductName() %></h2>
                                     </td>
-                                    <td><%= cart.getUnitPrice() %>원</td>
+                                    <td>
+                                        <input type="hidden" name="unitPrice" value="<%= cart.getUnitPrice() %>">
+                                        <span class="unitPrice"><%= cart.getUnitPrice() %></span>원
+                                    </td>
                                     <td>
                                         <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                                             <div class="input-group-prepend">
@@ -79,7 +95,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><%= cart.getUnitPrice() * cart.getCnt() %>원</td>
+                                    <td><span class="price"><%= cart.getUnitPrice() * cart.getCnt() %></span>원</td>
                                 </tr>
                             <%
                                 }
@@ -93,12 +109,9 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="row mb-5">
-<%--                        <div class="col-md-6 mb-3 mb-md-0">--%>
-<%--                            <button id="btn-selected" class="btn btn-black btn-sm btn-block">선택삭제</button>--%>
-<%--                        </div>--%>
                         <div class="col-md-10">
                             <button id="btn-selected" class="btn btn-black btn-sm btn-block" style="margin-right: 10px;">선택삭제</button>
-                            <button id="btn-products" class="btn btn-outline-black btn-sm btn-block">쇼핑목록</button>
+                            <button id="btn-list" class="btn btn-outline-black btn-sm btn-block">쇼핑목록</button>
                         </div>
                     </div>
                 </div>
@@ -116,7 +129,7 @@
                                     <span class="text-black">Total</span>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <strong class="text-black"><%= total %>원</strong>
+                                    <strong class="text-black total"><%= total %>원</strong>
                                 </div>
                             </div>
 
@@ -136,9 +149,12 @@
     <script>
         // AJAX 장바구니 수량변경
         $('.amount').click(function () {
-            const amount = $(this).data("amount");
-            const cno = $(this).parent().siblings("input[name=cno]").val();
-            let cnt = $(this).parent().siblings(".cnt");
+            const amount = $(this).data('amount');
+            const tr = $(this).closest('tr');
+            const unitPrice = parseInt(tr.find('td input[name=unitPrice]').val()); // 상품 가격
+            const price = tr.find('td .price'); // unitPrice * cnt = 가격 input
+            const cno = tr.find('td input[name=cno]').val(); // 장바구니 번호
+            let cnt = tr.find("td .cnt");
             console.log('cno: ' + cno, 'cnt: ' + cnt.val(), 'amount: ' + amount);
 
             // AJAX 요청 보내기
@@ -152,7 +168,17 @@
                 },
                 success: function (response) {
                     // 업데이트 성공
-                    cnt.val(amount === "increase" ? parseInt(cnt.val()) + 1 : parseInt(cnt.val()) - 1);
+                    if (amount === "increase") {
+                        cnt.val(parseInt(cnt.val()) + 1); // 수량 업데이트
+                        price.text(parseInt(price.text()) + unitPrice); // 가격 업데이트
+                        $('strong.total').text(parseInt($('strong.total').text()) + unitPrice); // 총 주문금액 업데이트
+                    }
+                    else {
+                        cnt.val(parseInt(cnt.val()) - 1);
+                        price.text(parseInt(price.text()) - unitPrice);
+                        $('strong.total').text(parseInt($('strong.total').text()) - unitPrice);
+                    }
+
                     console.log("수량 업데이트 성공: " + response.message);
                 },
                 error: function (xhr, status, error) {
@@ -187,15 +213,14 @@
             // 주문
             const btnOrder = document.querySelector("#btn-order");
             btnOrder.addEventListener("click", function () {
-                frmCart.action = "/shippingInfo";
+                frmCart.action = "/cart/shippingInfo";
                 frmCart.submit();
             });
 
             // 쇼핑목록
-            const btnProducts = document.querySelector("#btn-products");
+            const btnProducts = document.querySelector("#btn-list");
             btnProducts.addEventListener("click", function () {
-               frmCart.action = "/products";
-               frmCart.submit();
+               location.href = "/products";
             });
         });
     </script>
