@@ -54,5 +54,4 @@ public enum MemberService {
     public void modifyPassword (String emailId,String password) throws SQLException {
         memberDAO.updatePassword(emailId,password);
     }
-
 }

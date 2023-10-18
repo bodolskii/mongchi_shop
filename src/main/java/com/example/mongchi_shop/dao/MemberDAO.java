@@ -88,11 +88,16 @@ public class MemberDAO {
         MemberVO memberVO = null;
         if(resultSet.next()) {
             memberVO = MemberVO.builder()
+                    .mno(resultSet.getInt("mno"))
                     .emailId(resultSet.getString("emailId"))
+                    .password(resultSet.getString("password"))
                     .memberName(resultSet.getString("memberName"))
                     .zipCode(resultSet.getString("zipCode"))
                     .address01(resultSet.getString("address01"))
                     .address02(resultSet.getString("address02"))
+                    .uuid(resultSet.getString("uuid"))
+                    .birthday(resultSet.getString("birthday"))
+                    .phone(resultSet.getString("phone"))
                     .build();
         }
 
