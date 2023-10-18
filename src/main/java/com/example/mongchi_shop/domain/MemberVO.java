@@ -23,5 +23,6 @@ public class MemberVO {
     private String addDate;
     private String birthday;
     private String uuid;
+    private String admin;
 
 }

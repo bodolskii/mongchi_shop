@@ -31,6 +31,15 @@ public class LoginController extends HttpServlet {
 
         try {
             MemberDTO memberDTO = MemberService.INSTANCE.login(emailId, password);
+            if(memberDTO.getAdmin().equals("Y")) {
+                log.info("YES ADMIN");
+                HttpSession session = req.getSession();
+                session.setAttribute("admin",memberDTO);
+                resp.sendRedirect("/admin/products");
+                return;
+            }
+
+
 
             if(rememberMe) {
                 // 로그인 성공해야 임의의 문자열 생성

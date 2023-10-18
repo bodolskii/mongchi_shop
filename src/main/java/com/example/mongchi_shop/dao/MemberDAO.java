@@ -47,6 +47,7 @@ public class MemberDAO {
                     .uuid(resultSet.getString("uuid"))
                     .birthday(resultSet.getString("birthday"))
                     .phone(resultSet.getString("phone"))
+                    .admin(resultSet.getString("admin"))
                     .build();
         }
 

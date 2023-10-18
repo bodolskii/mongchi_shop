@@ -25,5 +25,6 @@ public class MemberDTO {
     private String addDate;
     private String birthday;
     private String uuid;
+    private String admin;
 
 }
