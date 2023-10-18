@@ -52,20 +52,29 @@
 
 <body>
 <jsp:include page="/WEB-INF/inc/menu.jsp" />
-<div class="hero">
-    <div class="container">
-        <div class="row justify-content-between">
-            <div class="col-lg-5">
-                <div class="intro-excerpt">
-                    <h1>내가 쓴 리뷰목록</h1>
-                </div>
-            </div>
-            <div class="col-lg-7">
 
-            </div>
+<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+    <div class="container">
+        <a class="navbar-brand">마이 페이지<span>.</span></a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item active">
+                    <a class="nav-link" id="cart" href="/member/mypage"> 장바구니 </a>
+                </li>
+                <li><a class="nav-link" href="/member/myQnA"> QnA </a></li>
+                <li><a class="nav-link" href="/review/myReview"> 나의 리뷰 </a></li>
+                <li><a class="nav-link" href="/member/modify"> 내정보수정 </a></li>
+            </ul>
         </div>
     </div>
-</div>
+</nav>
+
 
 <!-- 주요 내용 섹션 -->
 <div class="container mt-4">

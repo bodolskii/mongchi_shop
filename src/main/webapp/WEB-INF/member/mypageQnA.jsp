@@ -79,11 +79,8 @@
                             <th>아이디</th>
                             <th>내용</th>
                             <th>작성일</th>
-
                         </tr>
                         </thead>
-
-
                         <tbody>
                         <c:forEach var="qnaDto" items="${qnABoardDTOList}">
                             <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -92,7 +89,7 @@
                                 <c:if test="${qnaDto.secreted == true}">
                                     <c:choose>
                                         <c:when test="${qnaDto.emailId eq 'd'}">
-                                            <td>${qnaDto.questionContent}</td>
+                                             <td>${qnaDto.questionContent}</td>
                                         </c:when>
                                         <c:otherwise>
                                             <td><i class="fa-solid fa-lock"></i>&nbsp;비밀글입니다</td>
@@ -103,6 +100,7 @@
                                     <td>${qnaDto.questionContent}</td>
                                 </c:if>
                                 <td>${qnaDto.getQuestionDate()}</td>
+                                <td><a href="/qnaBoard/modifyQuestion?qno=${qnaDto.qno}&pno=${qnaDto.pno}" value="수정"/>수정하기</td>
                             </tr>
                         </c:forEach>
 

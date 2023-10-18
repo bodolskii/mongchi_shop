@@ -61,7 +61,7 @@
 
                 <form id="modifyQuestionForm" action="/qnaBoard/modifyQuestion" method="post">
                   <p><input type="hidden" name="qno" value="${qnABoardDTO.qno}" ></p>
-                  <p><input type="hidden" name="pcode" value="${qnABoardDTO.pcode}" ></p>
+                  <p><input type="hidden" name="pcode" value="${qnABoardDTO.pno}" ></p>
                   <p><label>이메일&nbsp;</label><input type="text" name="emailId" value="${qnABoardDTO.emailId}" readonly></p>
                   <p><label>내용&nbsp;</label><textarea name="questionContent">${qnABoardDTO.questionContent}</textarea></p>
                   <input type="checkbox" name="secreted"><label>&nbsp;비밀글 설정&nbsp;</label>
